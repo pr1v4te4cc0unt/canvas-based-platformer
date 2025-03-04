@@ -45,17 +45,17 @@ export class Enemy extends GameObject {
         }
     }
 
-    onGameObjectCollision(objArr){
-        for(let i = 0; i < objArr.length; i++){
-            switch(objArr[i].gameObjectType){
-                case GameObjectType.PLATFORM:
-                    this.#onPlatformCollision(objArr[i], i);
-                    break;
-            }
+    onGameObjectCollision(obj){
+        let collisionDetected = false;
+        switch(obj.gameObjectType){
+            case GameObjectType.PLATFORM:
+                console.log(`${obj.gameObjectType} collision detected!`);
+                collisionDetected = this.#onPlatformCollision(obj);
+                break;
         }
     }
 
-    #onPlatformCollision(obj, index){
+    #onPlatformCollision(obj){
         if(CollisionDetection2D.topCollisionDetected(this, obj)){
             this.setCurrentYVelocity(0);
         }

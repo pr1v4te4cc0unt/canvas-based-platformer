@@ -35,32 +35,28 @@ async function animate(){
         platform.update();
     });
 
-    player.onGameObjectCollision(platforms);
-
     enemies.forEach((enemy) => {
         enemy.update();
-        enemy.onGameObjectCollision(platforms);
     });
 
-    // player.update();
-    // player.onGameObjectCollision(platforms);
-    // player.onGameObjectCollision(enemies);
-    
-    // for(let i = 0; i < enemies.length; i++){
-    //     console.log(i);
-    //     enemies[i].onGameObjectCollision(platforms);
-    // }
+    platforms.forEach((platform) => {
+        player.onGameObjectCollision(platform);
+        enemies.forEach((enemy) => {
+            enemy.onGameObjectCollision(platform);
+        });
+    });
 
-    // if(CanvasCollisionDetection2D.bottomCollisionDetected(player, ctx)){
-    //     levelAudio.pause();
-    //     pauseGame();
-    // }
+    if(CanvasCollisionDetection2D.bottomCollisionDetected(player, ctx)){
+        levelAudio.pause();
+        player.deathAudio.play();
+        pauseGame();
+    }
 
-    // if(CollisionDetection2D.collisionDetected(player, goal)){
-    //     levelAudio.pause();
-    //     levelCompleteAudio.play();
-    //     pauseGame();
-    // }
+    if(CollisionDetection2D.collisionDetected(player, goal)){
+        levelAudio.pause();
+        levelCompleteAudio.play();
+        pauseGame();
+    }
 }
 
 function pauseGame(){

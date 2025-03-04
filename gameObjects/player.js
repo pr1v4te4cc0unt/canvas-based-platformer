@@ -34,61 +34,57 @@ export class Player extends GameObject {
 
     onEnvironmentCollision(){
         if(CanvasCollisionDetection2D.topCollisionDetected(this, this.ctx)){
+            console.log("Environment collision detected: TOP.");
             this.setCurrentYVelocity(0);
         }
         
         if(CanvasCollisionDetection2D.bottomCollisionDetected(this, this.ctx)){
+            console.log("Environment collision detected: BOTTOM.");
             this.setCurrentYVelocity(0);
         }
 
         if(CanvasCollisionDetection2D.leftCollisionDetected(this, this.ctx)){
+            console.log("Environment collision detected: LEFT.");
             this.setCurrentXVelocity(0);
         }
         
         if(CanvasCollisionDetection2D.rightCollisionDetected(this, this.ctx)){
+            console.log("Environment collision detected: RIGHT.");
             this.setCurrentXVelocity(0);
         }
     }
 
-    onGameObjectCollision(objArr){
-        for(let i = 0; i < objArr.length; i++){
-            let collisionDetected = false;
-            switch(objArr[i].gameObjectType){
-                case GameObjectType.PLATFORM:
-                    collisionDetected = this.#onPlatformCollision(objArr[i], i);
-                    break;
-                case GameObjectType.ENEMY:
-                    collisionDetected = this.#onEnemyCollision(objArr[i], i, objArr);
-                    break;
-            }
-            if(collisionDetected){
+    onGameObjectCollision(obj){
+        let collisionDetected = false;
+        switch(obj.gameObjectType){
+            case GameObjectType.PLATFORM:
+                console.log(`${obj.gameObjectType} collision detected!`);
+                collisionDetected = this.#onPlatformCollision(obj);
                 break;
-            }
+            case GameObjectType.ENEMY:
+                console.log(`${obj.gameObjectType} collision detected!`);
+                collisionDetected = this.#onEnemyCollision(obj);
+                break;
         }
     }
 
     #onPlatformCollision(obj){
-        if(CollisionDetection2D.collisionDetected(this, obj)){
-            if(CollisionDetection2D.topCollisionDetected(this, obj)){
-                this.setCurrentYVelocity(0);
-            }
-            else if(CollisionDetection2D.bottomCollisionDetected(this, obj)){
-                this.setCurrentYVelocity(0);
-            }
-            else if(CollisionDetection2D.leftCollisionDetected(this, obj)){
-                this.setCurrentXVelocity(0);
-            }
-            else if(CollisionDetection2D.rightCollisionDetected(this, obj)){
-                this.setCurrentXVelocity(0);
-            }
-            return true;
+        if(CollisionDetection2D.topCollisionDetected(this, obj)){
+            this.setCurrentYVelocity(0);
         }
-        else{
-            return false;
+        else if(CollisionDetection2D.bottomCollisionDetected(this, obj)){
+            this.setCurrentYVelocity(0);
+            this.isGrounded = true;
+        }
+        else if(CollisionDetection2D.leftCollisionDetected(this, obj)){
+            this.setCurrentXVelocity(0);
+        }
+        else if(CollisionDetection2D.rightCollisionDetected(this, obj)){
+            this.setCurrentXVelocity(0);
         }
     }
 
-    #onEnemyCollision(obj, index, objArr){
+    #onEnemyCollision(obj){
         if(CollisionDetection2D.collisionDetected(this, obj)){
             if(CollisionDetection2D.topCollisionDetected(this, obj)){
                 this.setCurrentXVelocity(0);
@@ -105,10 +101,6 @@ export class Player extends GameObject {
                 this.setCurrentXVelocity(0);
                 this.setCurrentYVelocity(0);
             }
-            return true;
-        }
-        else{
-            return false;
         }
     }
 
