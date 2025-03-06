@@ -4,6 +4,7 @@
         {
             "id": 1,
             "name": "level_one",
+            "backgroundMusic":"./assets/music/01. Ground Theme.mp3",
             "playerPosition": [25, 50],
             "platformPositions": [
                 [0,125],
@@ -45,11 +46,16 @@
                 [596,100],
                 [608,100]
             ],
-            "goalPosition": [500, 100]
+            "goalPosition": [550, 60],
+            "enemyPositions": [
+                [30, 50],
+                [30, 90]
+            ]
         },
         {
             "id": 2,
             "name": "level_two",
+            "backgroundMusic":"./assets/music/03. Underwater Theme.mp3",
             "playerPosition": [25, 50],
             "platformPositions": [
                 [0,100],
@@ -91,7 +97,11 @@
                 [596,125],
                 [608,125]
             ],
-            "goalPosition": [565, 85]
+            "goalPosition": [565, 85],
+            "enemyPositions": [
+                [30, 50],
+                [30, 90]
+            ]
         }
     ]
 }

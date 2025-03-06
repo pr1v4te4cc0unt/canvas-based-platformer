@@ -29,34 +29,20 @@ async function animate(){
     requestAnimationFrame(await animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    player.update();
-
-    platforms.forEach((platform) => {
-        platform.update();
+    await gameObjects.forEach(async (gameObject) => {
+        await gameObject.update();
     });
 
-    enemies.forEach((enemy) => {
-        enemy.update();
-    });
-
-    platforms.forEach((platform) => {
-        player.onGameObjectCollision(platform);
-        enemies.forEach((enemy) => {
-            enemy.onGameObjectCollision(platform);
+    await environmentObjects.forEach(async (environmentObject) => {
+        await player.onGameObjectCollision(environmentObject);
+        await enemies.forEach((enemy) => {
+            enemy.onGameObjectCollision(environmentObject);
         });
+        environmentObject.x -= player.currentXVelocity;
     });
 
-    if(CanvasCollisionDetection2D.bottomCollisionDetected(player, ctx)){
-        levelAudio.pause();
-        player.deathAudio.play();
-        pauseGame();
-    }
-
-    if(CollisionDetection2D.collisionDetected(player, goal)){
-        levelAudio.pause();
-        levelCompleteAudio.play();
-        pauseGame();
-    }
+    onGoalCollision();
+    onDeath();
 }
 
 function pauseGame(){
@@ -68,24 +54,26 @@ var ctx = canvas.getContext("2d");
 
 var IS_PAUSED = true;
 
+var currentLevel = 0;
+
+const levelsJson = await getJsonFileAsync("./assets/levels.json");
+
 var playerKeyBoardControlMap = new KeyboardControlMap(KeyCode.KeyW, KeyCode.KeyS, KeyCode.KeyA, KeyCode.KeyD, KeyCode.Space);
 var player = new Player(ctx, 0, (canvas.height / 2), 5, 5)
              .setKeyBoardControlMap(playerKeyBoardControlMap);
 player.registerEventListeners(document);
 
-var enemyOne = new Enemy(ctx, 30, (canvas.height / 2));
-var enemyTwo = new Enemy(ctx, 90, (canvas.height / 2));
-var enemies = [enemyOne, enemyTwo];
+var backgroundMusic = new Audio(levelsJson.levels[currentLevel].backgroundMusic);
 
-const levelsJson = await getJsonFileAsync("./assets/levels.json");
+var platforms = levelsJson.levels[currentLevel].platformPositions.map((platformPosition) => new Platform(ctx, platformPosition[0], platformPosition[1]));
 
-var levelTwo = levelsJson.levels[1];
+var goal = new Goal(ctx, levelsJson.levels[currentLevel].goalPosition[0], levelsJson.levels[0].goalPosition[1]);
 
-var platforms = levelTwo.platformPositions.map((platformPosition) => new Platform(ctx, platformPosition[0], platformPosition[1]));
-
-var goal = new Goal(ctx, levelTwo.goalPosition[0], levelTwo.goalPosition[1]);
+var enemies = levelsJson.levels[currentLevel].enemyPositions.map((enemyPosition) => new Enemy(ctx, enemyPosition[0], enemyPosition[1]));
 
 var environmentObjects = [...platforms, goal, ...enemies];
+
+var gameObjects = [player, ...environmentObjects];
 
 const startGameContainer = document.querySelector("#startGameContainer");
 const startButton = document.querySelector("#startButton");
@@ -95,9 +83,68 @@ const pauseButton = document.querySelector("#pauseButton");
 const restartButton = document.querySelector("#restartButton");
 
 const levelCompleteAudio = new Audio("./assets/music/06. Level Complete.mp3");
-const levelAudio = new Audio('./assets/music/01. Ground Theme.mp3');
 const deathAudio = new Audio('./assets/sounds/08. Lost a Life.mp3');
 
+function onGoalCollision(){
+    if(CollisionDetection2D.collisionDetected(goal, player)){
+        if(CollisionDetection2D.topCollisionDetected(goal, player)){
+            player.setCurrentXVelocity(0);
+            player.setCurrentYVelocity(0);
+        }
+        else if(CollisionDetection2D.bottomCollisionDetected(goal, player)){
+            player.setCurrentYVelocity(0);
+        }
+        else if(CollisionDetection2D.leftCollisionDetected(goal, player)){
+            player.setCurrentXVelocity(0);
+            player.setCurrentYVelocity(0);
+        }
+        else if(CollisionDetection2D.rightCollisionDetected(goal, player)){
+            player.setCurrentXVelocity(0);
+            player.setCurrentYVelocity(0);
+        }
+        backgroundMusic.pause();
+        levelCompleteAudio.play();
+        pauseGame();
+
+        setTimeout(async () => { 
+            await loadNextLevel();
+            pauseGame(IS_PAUSED);
+            await animate();
+        }, 10000)
+    }
+};
+
+function onDeath(){
+    if(CanvasCollisionDetection2D.bottomCollisionDetected(player, ctx)){
+        backgroundMusic.pause();
+        player.deathAudio.play();
+        pauseGame();
+        setTimeout(async () => { 
+            await generateLevel();
+            pauseGame(IS_PAUSED);
+            await animate();
+        }, 5000)
+    }
+}
+
+async function generateLevel(){
+    player.deregisterEventListeners(document);
+    player = new Player(ctx, 0, (canvas.height / 2), 5, 5)
+             .setKeyBoardControlMap(playerKeyBoardControlMap);
+    player.registerEventListeners(document);
+    backgroundMusic = new Audio(levelsJson.levels[currentLevel].backgroundMusic);
+    platforms = levelsJson.levels[currentLevel].platformPositions.map((platformPosition) => new Platform(ctx, platformPosition[0], platformPosition[1]));
+    goal = new Goal(ctx, levelsJson.levels[currentLevel].goalPosition[0], levelsJson.levels[0].goalPosition[1]);
+    enemies = levelsJson.levels[currentLevel].enemyPositions.map((enemyPosition) => new Enemy(ctx, enemyPosition[0], enemyPosition[1]));
+    environmentObjects = [...platforms, goal, ...enemies];
+    gameObjects = [player, ...environmentObjects];
+    backgroundMusic.play();
+}
+
+async function loadNextLevel(){
+    currentLevel++;
+    await generateLevel();
+}
 
 pauseButton.addEventListener('click', (event) => {
     
@@ -107,21 +154,15 @@ pauseButton.addEventListener('click', (event) => {
 }, false);
 
 startButton.addEventListener('click', (event) => {
-    
-    setGame();
 
     startGameContainer.style.display = "none";
     gameContainer.style.display = "flex";
     gameButtonContainer.style.display = "flex";
 
     setTimeout(async () => { 
+        await generateLevel();
         pauseGame(IS_PAUSED);
         await animate();
-        levelAudio.play();
     }, 1000)
 
 }, false);
-
-function setGame(){
-
-}

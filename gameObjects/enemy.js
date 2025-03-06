@@ -18,15 +18,15 @@ export class Enemy extends GameObject {
 
     //
 
-    update() {
+    async update() {
         this.#calculateXPosition();
         this.#calculateYPosition();
-        this.resolveDraw();
+        super.resolveDraw();
         this.onEnvironmentCollision();
         this.#move();
     }
 
-    onEnvironmentCollision(){
+    async onEnvironmentCollision(){
         if(CanvasCollisionDetection2D.topCollisionDetected(this, this.ctx)){
             this.setCurrentYVelocity(0);
         }
@@ -45,17 +45,17 @@ export class Enemy extends GameObject {
         }
     }
 
-    onGameObjectCollision(obj){
+    async onGameObjectCollision(obj){
         let collisionDetected = false;
         switch(obj.gameObjectType){
             case GameObjectType.PLATFORM:
                 console.log(`${obj.gameObjectType} collision detected!`);
-                collisionDetected = this.#onPlatformCollision(obj);
+                collisionDetected = await this.#onPlatformCollision(obj);
                 break;
         }
     }
 
-    #onPlatformCollision(obj){
+    async #onPlatformCollision(obj){
         if(CollisionDetection2D.topCollisionDetected(this, obj)){
             this.setCurrentYVelocity(0);
         }

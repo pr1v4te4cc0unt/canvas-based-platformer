@@ -12,6 +12,7 @@ export class Player extends GameObject {
     isGrounded = false;
     jumpAudio = new Audio("../assets/sounds/maro-jump-sound-effect_1.mp3");
     deathAudio = new Audio('../assets/sounds/08. Lost a Life.mp3');
+    goalAudio = new Audio("../assets/music/06. Level Complete.mp3");
 
     constructor(ctx, x, y, height = 5, width = 5, xVelocity = 2, yVelocity = 4, styleType = StyleType.FILL, style = "#000000", keyboardControlMap = null, currentXVelocity = 0, currentYVelocity = 0, incrementingXVelocity = 0.10, incrementingYVelocity = 0.10, defaultGravity = 0.05){
         super(ctx, x, y, height, width, xVelocity, yVelocity, styleType, style, keyboardControlMap, currentXVelocity, currentYVelocity, incrementingXVelocity, incrementingYVelocity, defaultGravity);
@@ -20,10 +21,10 @@ export class Player extends GameObject {
 
     //
 
-    update(objArray) {
+    async update() {
         this.#calculateXPosition();
         this.#calculateYPosition();
-        this.resolveDraw();
+        super.resolveDraw();
         this.onEnvironmentCollision();
     }
 
@@ -32,7 +33,7 @@ export class Player extends GameObject {
         this.onEnvironmentCollision();
     }
 
-    onEnvironmentCollision(){
+    async onEnvironmentCollision(){
         if(CanvasCollisionDetection2D.topCollisionDetected(this, this.ctx)){
             console.log("Environment collision detected: TOP.");
             this.setCurrentYVelocity(0);
@@ -41,6 +42,7 @@ export class Player extends GameObject {
         if(CanvasCollisionDetection2D.bottomCollisionDetected(this, this.ctx)){
             console.log("Environment collision detected: BOTTOM.");
             this.setCurrentYVelocity(0);
+            this.isGrounded = true;
         }
 
         if(CanvasCollisionDetection2D.leftCollisionDetected(this, this.ctx)){
@@ -54,21 +56,21 @@ export class Player extends GameObject {
         }
     }
 
-    onGameObjectCollision(obj){
+    async onGameObjectCollision(obj){
         let collisionDetected = false;
         switch(obj.gameObjectType){
             case GameObjectType.PLATFORM:
                 console.log(`${obj.gameObjectType} collision detected!`);
-                collisionDetected = this.#onPlatformCollision(obj);
+                collisionDetected = await this.#onPlatformCollision(obj);
                 break;
             case GameObjectType.ENEMY:
                 console.log(`${obj.gameObjectType} collision detected!`);
-                collisionDetected = this.#onEnemyCollision(obj);
+                collisionDetected = await this.#onEnemyCollision(obj);
                 break;
         }
     }
 
-    #onPlatformCollision(obj){
+    async #onPlatformCollision(obj){
         if(CollisionDetection2D.topCollisionDetected(this, obj)){
             this.setCurrentYVelocity(0);
         }
@@ -84,7 +86,7 @@ export class Player extends GameObject {
         }
     }
 
-    #onEnemyCollision(obj){
+    async #onEnemyCollision(obj){
         if(CollisionDetection2D.collisionDetected(this, obj)){
             if(CollisionDetection2D.topCollisionDetected(this, obj)){
                 this.setCurrentXVelocity(0);

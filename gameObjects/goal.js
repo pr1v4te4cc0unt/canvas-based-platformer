@@ -27,7 +27,7 @@ export class Goal extends FillRect {
         return this;
     }
 
-    update() {
-        this.draw();
+    async update() {
+        super.draw();
     }
 }
