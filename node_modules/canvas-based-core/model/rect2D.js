@@ -1,35 +1,16 @@
-import { Point2D } from "../../geometry/point2D.js";
+import { ObjectBase2D } from "./ObjectBase2D.js";
 
-export class Shape {
+export class Rect2D extends ObjectBase2D {
 
-    ctx;
-    x;
-    y;
+    //props
+    //type int
     height;
     width;
-    
 
-    constructor(ctx, x, y, height = 100, width = 200){
-        this.ctx = ctx;
-        this.x = x;
-        this.y = y;
+    constructor(x, y, height, width, xVelocity = 0.00, yVelocity = 0.00) {
+        super(x, y, xVelocity, yVelocity);
         this.height = height;
         this.width = width;
-    }
-
-    setCTX(val){
-        this.ctx = val;
-        return this;
-    }
-
-    setX(val){
-        this.x = val;
-        return this;
-    }
-
-    setY(val){
-        this.y = val;
-        return this;
     }
 
     setHeight(val){
@@ -67,14 +48,15 @@ export class Shape {
     }
 
     getCenterCoord(){
-        const x = (this.x + (this.width / 2));
-        const y = (this.y + (this.height / 2));
+        const x = ((this.x + this.width) / 2);
+        const y = ((this.y + this.height) / 2);
         return new Point2D(x, y);
     }
 
     getCoordinates(){
-        //clockwise from canvas origin x,y ie topleft
+        //clockwise from origin x, y ie topleft
         //[topleft, topright, bottomright, bottomleft, center]
         return [this.getTopLeftCoord(), this.getTopRightCoord(), this.getBottomRightCoord(), this.getBottomLeftCoord(), this.getCenterCoord()];
     }
+
 }

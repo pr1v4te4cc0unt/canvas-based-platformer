@@ -1,25 +1,14 @@
-import { Shape } from "./canvas/model/shape.js";
-import { FillShape } from "./canvas/model/fillShape.js";
-import { FillRect } from "./canvas/model/fillRect.js";
-import { StrokeShape } from "./canvas/model/strokeShape.js";
-import { StrokeRect } from "./canvas/model/strokeRect.js";
-import { CollisionDetection } from "./canvas/model/collisionDetection/collisionDetection.js";
-import { CollisionDetection2D } from "./canvas/model/collisionDetection/collisionDetection2D.js";
-import { Point2D } from "./geometry/point2D.js";
-import { CanvasCollisionDetection } from "./canvas/environment/canvasCollisionDetection.js";
-import { CanvasCollisionDetection2D } from "./canvas/environment/canvasCollisionDetection2D.js";
-import { KeyCode } from "./controls/keyCode.js";
+import { 
+    CollisionDetection2D, 
+    CanvasCollisionDetection2D, 
+    KeyCode
+} from "./node_modules/canvas-based-core/module.js";
 import { KeyboardControlMap } from "./controls/keyboardControlMap.js";
 import { Platform } from "./gameObjects/platform.js";
 import { Player } from "./gameObjects/player.js";
-import { GameObject } from "./gameObjects/gameObject.js";
-import { GameObjectType } from "./gameObjects/gameObjectType.js";
 import { Goal } from "./gameObjects/goal.js";
 import { Enemy } from "./gameObjects/enemy.js";
-import { LevelSchema } from "./gameObjects/levelSchema.js";
-import { Level } from "./gameObjects/level.js";
 import { getJsonFileAsync } from "./utility/utility.js";
-import { StyleType } from "./canvas/model/styleType.js";
 
 async function animate(){
     if(IS_PAUSED){

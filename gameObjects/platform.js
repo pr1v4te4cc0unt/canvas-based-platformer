@@ -1,7 +1,6 @@
-import { CanvasCollisionDetection2D } from "../canvas/environment/canvasCollisionDetection2D.js";
-import { CollisionDetection } from "../canvas/model/collisionDetection/collisionDetection.js";
-import { CollisionDetection2D } from "../canvas/model/collisionDetection/collisionDetection2D.js";
-import { StyleType } from "../canvas/model/styleType.js";
+import { 
+    StyleType 
+} from "../node_modules/canvas-based-core/module.js";
 import { GameObjectType } from "./gameObjectType.js";
 import { GameObject } from "./gameObject.js";
 

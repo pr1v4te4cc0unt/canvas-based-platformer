@@ -1,5 +1,5 @@
 import { CollisionDetection } from "./collisionDetection.js";
-import { Point2D } from "../../../geometry/point2D.js";
+import { Point2D } from "../geometry/point2D.js";
 
 export class CollisionDetection2D extends CollisionDetection {
 

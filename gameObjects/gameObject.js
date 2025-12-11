@@ -1,11 +1,9 @@
-import { Shape } from "../canvas/model/shape.js";
-import { StyleType } from "../canvas/model/styleType.js";
-import { CanvasCollisionDetection2D } from "../canvas/environment/canvasCollisionDetection2D.js";
-import { CollisionDetection } from "../canvas/model/collisionDetection/collisionDetection.js";
-import { CollisionDetection2D } from "../canvas/model/collisionDetection/collisionDetection2D.js";
-import { GameObjectType } from "./gameObjectType.js";
+import { 
+    CanvasRect2D, 
+    StyleType 
+} from "../node_modules/canvas-based-core/module.js";
 
-export class GameObject extends Shape {
+export class GameObject extends CanvasRect2D {
 
     //property, ctor
     gameObjectType;
