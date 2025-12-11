@@ -8,15 +8,15 @@ export class CollisionDetection2D extends CollisionDetection {
     }
 
     static leftCollisionDetected(source, target){
-        return ((source.x) <= (target.x + target.width)) && 
-               ((source.x + source.width) >= (target.x + target.width)) &&
-               this.isWithinYRange(source, target);
+        return (source.x >= target.x) && 
+               (source.x <= (target.x + target.width)) && 
+               this.#isWithinYRange(source, target);
     }
 
     static rightCollisionDetected(source, target){
-        return ((source.x + source.width) >= target.x) &&
-               ((source.x) <= (target.x)) &&
-               this.isWithinYRange(source, target); 
+        return ((source.x + source.width) >= target.x) && 
+               ((source.x + source.width) <= (target.x + target.width)) &&
+               this.#isWithinYRange(source, target); 
     }
 
     static horizontalCollisionDetected(source, target){
@@ -51,15 +51,15 @@ export class CollisionDetection2D extends CollisionDetection {
     }
 
     static topCollisionDetected(source, target){
-        return ((source.y) <= (target.y + target.height)) &&
-               ((source.y + source.height) >= (target.y + target.height)) &&
-               this.isWithinXRange(source, target);
+        return (source.y >= target.y) && 
+               (source.y <= (target.y + target.height)) &&
+               this.#isWithinXRange(source, target);
     }
 
     static bottomCollisionDetected(source, target){
-        return ((source.y + source.height) >= target.y) &&
-               ((source.y) <= (target.y)) &&
-               this.isWithinXRange(source, target);
+        return ((source.y + source.height) >= target.y) && 
+               ((source.y + source.height) <= (target.y + target.height)) &&
+               this.#isWithinXRange(source, target);
     }
 
     static verticalCollisionDetected(source, target){
@@ -106,12 +106,12 @@ export class CollisionDetection2D extends CollisionDetection {
         }
     }
 
-    static isWithinXRange(source, target){
+    static #isWithinXRange(source, target){
         return (((source.x + source.width) >= target.x) && (source.x <= target.x)) || 
                ((source.x <= (target.x + target.width)) && (source.x >= target.x)); 
     }
 
-    static isWithinYRange(source, target){
+    static #isWithinYRange(source, target){
         return (((source.y + source.height) >= target.y) && (source.y <= target.y)) || 
                ((source.y <= (target.y + target.height)) && (source.y >= target.y));
     }

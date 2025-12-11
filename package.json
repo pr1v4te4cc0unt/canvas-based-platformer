@@ -1,5 +1,23 @@
 {
+  "name": "canvas-based-platformer",
+  "version": "1.0.0",
+  "description": "canvas-based-platformer",
+  "homepage": "https://github.com/pr1v4te4cc0unt/canvas-based-platformer#readme",
+  "bugs": {
+    "url": "https://github.com/pr1v4te4cc0unt/canvas-based-platformer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pr1v4te4cc0unt/canvas-based-platformer.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
-    "canvas-based-core": "^1.0.1"
+    "canvas-based-core": "^1.0.4"
   }
 }

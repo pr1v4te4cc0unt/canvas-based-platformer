@@ -8,7 +8,7 @@ export class CanvasRect2D extends Rect2D {
     styleType;
     style;
 
-    constructor(ctx, x, y, height, width, styleType = StyleType.FILL, style = "#000000", xVelocity = 0.00, yVelocity = 0.00) {
+    constructor(ctx, x, y, height, width, style = "#000000", styleType = StyleType.FILL, xVelocity = 0.00, yVelocity = 0.00) {
         super(x, y, height, width, xVelocity, yVelocity);
         this.ctx = ctx;
         this.styleType = styleType;

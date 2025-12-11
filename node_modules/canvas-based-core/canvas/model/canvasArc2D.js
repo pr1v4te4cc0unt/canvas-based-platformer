@@ -8,8 +8,8 @@ export class CanvasArc2D extends Arc2D {
     styleType;
     style;
 
-    constructor(ctx, x, y, radius = 0, startAngle = 0, endAngle = 0, styleType = StyleType.FILL, style = "#000000", xVelocity = 0.00, yVelocity = 0.00) {
-        super(x, y, height, width, xVelocity, yVelocity);
+    constructor(ctx, x, y, radius = 0, startAngle = 0, endAngle = 0, style = "#000000", styleType = StyleType.FILL, xVelocity = 0.00, yVelocity = 0.00) {
+        super(x, y, radius, startAngle, endAngle, xVelocity, yVelocity);
         this.ctx = ctx;
         this.styleType = styleType;
         this.style = style;

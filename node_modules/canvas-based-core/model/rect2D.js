@@ -1,4 +1,5 @@
 import { ObjectBase2D } from "./ObjectBase2D.js";
+import { Point2D } from "../geometry/point2D.js";
 
 export class Rect2D extends ObjectBase2D {
 
